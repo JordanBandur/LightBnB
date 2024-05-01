@@ -6,10 +6,10 @@ INSERT INTO users (name, email, password) VALUES
 
 
 -- Insert data into Properties table
-INSERT INTO properties (owner_id, title, description, thumbnail_photo_url, cover_photo_url, cost_per_night, parking_spaces, number_of_bathrooms, number_of_bedrooms, country, street, city, province, post_code) VALUES
-(1, 'Cozy Cottage', 'A charming cottage in the countryside.', 'http://example.com/thumbnail1.jpg', 'http://example.com/cover1.jpg', 150, 2, 1, 2, 'USA', '123 Countryside Rd', 'Springfield', 'IL', '62704'),
-(2, 'Beachside Villa', 'Beautiful beachside villa with stunning ocean views.', 'http://example.com/thumbnail2.jpg', 'http://example.com/cover2.jpg', 300, 3, 2, 3, 'USA', '456 Ocean Blvd', 'Miami', 'FL', '33139'),
-(3, 'Mountain Retreat', 'Quiet retreat in the mountains, perfect for hiking.', 'http://example.com/thumbnail3.jpg', 'http://example.com/cover3.jpg', 200, 4, 2, 4, 'USA', '789 Mountain Pass', 'Denver', 'CO', '80202');
+INSERT INTO properties (owner_id, title, description, thumbnail_photo_url, cover_photo_url, cost_per_night, parking_spaces, number_of_bathrooms, number_of_bedrooms, country, street, city, province, post_code, active) VALUES
+(1, 'Cozy Cottage', 'A charming cottage in the countryside.', 'http://example.com/thumbnail1.jpg', 'http://example.com/cover1.jpg', 150, 2, 1, 2, 'USA', '123 Countryside Rd', 'Springfield', 'IL', '62704', true),
+(2, 'Beachside Villa', 'Beautiful beachside villa with stunning ocean views.', 'http://example.com/thumbnail2.jpg', 'http://example.com/cover2.jpg', 300, 3, 2, 3, 'USA', '456 Ocean Blvd', 'Miami', 'FL', '33139', true),
+(3, 'Mountain Retreat', 'Quiet retreat in the mountains, perfect for hiking.', 'http://example.com/thumbnail3.jpg', 'http://example.com/cover3.jpg', 200, 4, 2, 4, 'USA', '789 Mountain Pass', 'Denver', 'CO', '80202', false);
 
 
 -- Insert data into Reservations table
