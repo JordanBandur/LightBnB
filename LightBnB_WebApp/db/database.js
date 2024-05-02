@@ -106,14 +106,57 @@ const getAllReservations = function(guest_id, limit = 10) {
  * @return {Promise<[{}]>}  A promise to the properties.
  */
 const getAllProperties = function(options, limit = 10) {
-  const queryString = `SELECT * FROM properties LIMIT $1`;
+  let queryString = `
+    SELECT properties.*, avg(property_reviews.rating) AS average_rating
+    FROM properties
+    LEFT JOIN property_reviews ON properties.id = property_reviews.property_id
+    WHERE 1=1
+  `; // The 'WHERE 1=1' is a technique used to simplify appending additional conditions
+
+  // Array to hold the parameter values for the query
+  const queryParams = [];
+
+  // Check for owner_id filter
+  if (options.owner_id) {
+    queryParams.push(options.owner_id);
+    queryString += ` AND owner_id = $${queryParams.length}`;
+  }
+
+  // Check for minimum and maximum price filters
+  if (options.minimum_price_per_night) {
+    queryParams.push(options.minimum_price_per_night * 100); // Convert dollars to cents
+    queryString += ` AND cost_per_night >= $${queryParams.length}`;
+  }
+  if (options.maximum_price_per_night) {
+    queryParams.push(options.maximum_price_per_night * 100); // Convert dollars to cents
+    queryString += ` AND cost_per_night <= $${queryParams.length}`;
+  }
+
+  // Add grouping by property ID before filtering by rating
+  queryString += `
+    GROUP BY properties.id
+  `;
+
+  // Check for minimum rating filter
+  if (options.minimum_rating) {
+    queryParams.push(options.minimum_rating);
+    queryString += ` HAVING avg(property_reviews.rating) >= $${queryParams.length}`;
+  }
+
+  // Complete the query with ordering and limiting
+  queryParams.push(limit);
+  queryString += `
+    ORDER BY cost_per_night
+    LIMIT $${queryParams.length};
+  `;
+
   return pool
-    .query(queryString, [limit])
-    .then((result) => {
+    .query(queryString, queryParams)
+    .then(result => {
       return result.rows;
     })
-    .catch((err) => {
-      console.log(err.message);
+    .catch(err => {
+      console.error("Error executing query", err.message);
     });
 };
 
